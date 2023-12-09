@@ -1,0 +1,32 @@
+// @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Rubik:wght@300;400;500;600;700;800;900&display=swap');
+//@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css");
+@import url("https://pro.fontawesome.com/releases/v5.15.4/css/all.css");
+
+
+$font-sizes: (10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 22, 24, 25, 26, 28, 30, 32, 34, 36, 38, 40);
+@each $size in $font-sizes {
+    .fs-#{$size} {
+        font-size: #{$size}px !important;        
+    }
+}
+
+$font-weight: (100, 200, 300, 400, 500, 600, 700, 800, 900);
+@each $weight in $font-weight {
+    .fw-#{$weight} {
+        font-weight: #{$weight} !important;
+    }
+}
+
+$line-heights: (10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 22, 24, 25, 26, 28, 30, 32, 34, 36, 38, 40);
+@each $height in $line-heights {
+    .lh-#{$height} {
+        line-height: #{$height}px !important;        
+    }
+}
+
+@import '../scss/theme-light.scss';
+
+

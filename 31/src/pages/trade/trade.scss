@@ -1,0 +1,356 @@
+@import '../../assets/scss/theme-light.scss';
+
+.tradepagemain{
+
+
+.graph{
+    padding: 15px;
+    border: 1px solid  $border-color;
+}
+
+.tradecard{
+    border: 1px solid #E2DAFF;
+    border-radius: 5px;
+}
+
+.gridhead, .gridrow{
+  display: grid;
+  grid-template-columns: auto auto auto;
+  grid-template-rows: auto;
+}
+.gridhead{
+    border: 1px solid #E2E4EE;
+    border-radius: 2px;
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 16px;
+    color: #909096;
+    padding: 5px;  
+    padding-right: 17px;
+    & > div{
+        padding: 0px 5px;
+    }
+    &.column10{     
+        // grid-auto-flow: column;   
+        grid-template-columns: 12% 12% 8% 8% 10% 10% 10% 10% 10% 10%;
+        // .item1{
+        //     grid-column-start: 1;
+        //     grid-column-end: 3;
+        // }
+        // .item2{
+        //     grid-column-start: 3;
+        //     grid-column-end: 5;
+        // }
+    }
+}
+.gridbody{
+    border: 1px solid transparent;
+    border-radius: 2px;
+    font-weight: 400;
+    font-size: 11px;
+    line-height: 16px;
+    color: #909096;
+    padding: 5px;    
+}
+.gridrow{
+    &.column10{     
+        // grid-auto-flow: column;   
+        grid-template-columns: 12% 12% 8% 8% 10% 10% 10% 10% 10% 10%;
+    }
+    // .item1{
+    //     grid-column-start: 1;
+    //     grid-column-end: 3;
+    // }
+    // .item2{
+    //     grid-column-start: 3;
+    //         grid-column-end: 5;
+    // }
+}
+.gridrow > div{
+    padding: 0px 5px;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 23px;
+    color: #0C0B15;
+}
+
+
+// ::ng-deep{
+    .mytradetabsIcon{
+        height: 100%;
+        .nav.nav-tabs{
+            position: absolute;
+            top: 5px;
+            right: 0px;
+            border-bottom: 0;
+            .nav-item{
+                 .nav-link{
+                     border: 0;
+                     padding: 0 10px;
+                        margin-bottom: 0;
+                 }
+            }
+        }
+    }
+
+    .mytabs{
+        & > .nav.nav-pills{
+            position: absolute;
+            top: 18px;
+            left: 15px;
+            border-bottom: 0;
+            @media (max-width: 767px) {
+                position: relative;
+                top: 0;
+                margin-bottom: 15px;    
+            }
+            .nav-item{
+                margin-right: 10px;
+                 .nav-link{
+                    border: 0;
+                    font-weight: 400;
+                    font-size: 14px;
+                    line-height: 16px;
+                    color: #0C0B15;                    
+                    padding: 8px 12px;
+                    margin-bottom: 0;
+                    &.active, &:hover{
+                        background: radial-gradient(92.09% 85.42% at 86.3% 87.5%, rgba(0, 0, 0, 0.23) 0%, rgba(0, 0, 0, 0) 86.18%) /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */, radial-gradient(65.28% 65.28% at 26.39% 20.83%, rgba(255, 255, 255, 0.413) 0%, rgba(255, 255, 255, 0) 69.79%, rgba(255, 255, 255, 0) 100%) /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */, #805CFF;
+                        border-radius: 30px;
+                        color: #EEEEEE;                        
+                    }
+                 }
+            }
+        }
+        &.mytabsright{
+           & > .nav.nav-pills{
+                position: relative;
+                top: 0px;
+                left: auto;
+                right: 0;
+                border-bottom: 0;
+                justify-content: end;
+            }
+        }
+       
+        
+    }
+
+    .mytabsButton  {
+        .nav.nav-pills{
+            position: relative !important;            
+        }
+    }
+//}
+
+
+
+
+
+
+.text-red{
+    color: #D73D3D;
+}
+.text-green{
+    color: #13B887;
+}
+
+.btn-buy{
+    background: #F4F5FA;
+    border-radius: 5px;
+    height: 40px;
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 16px;
+    color: #13B887;
+    &:hover{
+        background: $primary-gradient-color;
+        color: #ffffff;
+    }
+}
+.btn-sell{
+    background: #F4F5FA;
+    border-radius: 5px;
+    height: 40px;
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 16px;
+    color: #DF5453;
+    &:hover{
+        background: $primary-gradient-color;
+        color: #ffffff;
+    }
+}
+
+
+
+
+  .btn-green{
+      height: 43px;      
+      background: radial-gradient(92.09% 85.42% at 86.3% 87.5%, rgba(0, 0, 0, 0.23) 0%, rgba(0, 0, 0, 0) 86.18%) /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */, radial-gradient(65.28% 65.28% at 26.39% 20.83%, rgba(255, 255, 255, 0.413) 0%, rgba(255, 255, 255, 0) 69.79%, rgba(255, 255, 255, 0) 100%) /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */, #38B781;
+      border-radius: 100px;
+      color: #ffffff;
+      &:hover{
+        background: $primary-gradient-color;
+        color: #ffffff;
+    }
+  }
+  .btn-red{
+    height: 43px;      
+    background: radial-gradient(92.09% 85.42% at 86.3% 87.5%, rgba(0, 0, 0, 0.23) 0%, rgba(0, 0, 0, 0) 86.18%) /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */, radial-gradient(65.28% 65.28% at 26.39% 20.83%, rgba(255, 255, 255, 0.413) 0%, rgba(255, 255, 255, 0) 69.79%, rgba(255, 255, 255, 0) 100%) /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */, #FF545E;
+    border-radius: 100px;
+    color: #ffffff;
+    &:hover{
+        background: $primary-gradient-color;
+        color: #ffffff;
+    }
+}
+
+// ::ng-deep{
+.rightsideHeight{
+    height: calc(100vh - 597px);    
+    min-height: 300px;
+        .tab-content{
+            height: calc(100% - 30px);
+            .tab-pane{
+                height: 100%;
+            }
+        }
+    }
+    .tablefirst, .tablesecond{
+        height: calc(50% - 30px);
+        overflow: auto;
+    }
+    .tablethird{
+        height: calc(100% - 24px);
+        overflow: auto;
+    }
+
+
+
+    .leftsidetable{
+        height: calc(100vh - 644px);
+        .lefttabsec1{
+            height: calc(100% - 58px);
+        }
+        .tab-content{
+            height: calc(100% - 0px);
+            .tab-pane{
+                height: 100%;
+            }
+        }
+        .tableleft{
+            height: calc(100% - 24px);
+            overflow: auto;
+            min-height: 85px;
+        }
+    }
+//}
+.scroller::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+    border-radius: 10px;
+}
+
+.multi-range-slider.customslider{
+    box-shadow: none;
+    border: 0;
+    margin-bottom: 30px;
+    .bar-left, .bar-right{
+        padding: 2px 0px;
+        box-shadow: unset;
+    }
+    .bar-inner{
+        border: 0;
+        box-shadow: unset;
+    }
+    .thumb::before{
+        box-shadow: none;
+        border: 0;
+        margin: -2px -4px;
+        cursor: pointer;
+        width: 8px;
+        height: 8px;
+        background-color: #805CFF;
+    }
+    .caption{
+        display: none;
+    }
+}
+
+// ::ng-deep {
+//     .custom-slider .ngx-slider .ngx-slider-bar {
+//       background: #E8E1FF;
+//       height: 1.66px;
+//     }
+//     .custom-slider .ngx-slider .ngx-slider-selection {
+//       background: #805CFF;
+//     }
+  
+//     .custom-slider .ngx-slider .ngx-slider-pointer {
+//       width: 8px;
+//       height: 8px;
+//       top: auto; 
+//       bottom: 0;
+//       background-color: #805CFF;
+//       border-radius: 50%;
+   
+//     }
+  
+//     .custom-slider .ngx-slider .ngx-slider-pointer:after {
+//       display: none;
+//     }
+  
+//     .custom-slider .ngx-slider .ngx-slider-bubble {
+//       bottom: 14px;
+//     }
+  
+//     .custom-slider .ngx-slider .ngx-slider-limit {
+//       font-weight: bold;
+//       color: #805CFF;
+//     }
+  
+//     .custom-slider .ngx-slider .ngx-slider-tick {
+//       width: 7px;
+//       height: 7px;
+//       margin-left: 0px;
+//       border-radius: 100%;      
+//      background: #EEEEEE;
+//      border: 0.829365px solid #805CFF;
+//       top: 0px;
+//     }
+  
+//     .custom-slider .ngx-slider .ngx-slider-tick.ngx-slider-selected {
+//       background: #805CFF;
+//     }
+//     .ngx-slider .ngx-slider-tick-legend{
+//         top: 10px;
+//         color: #909096;
+//         font-size: 12px;
+//         font-weight: 400;
+//     }
+//   }
+
+@media only screen and (max-width: 767px){
+    .gridhead.column10{
+        grid-template-columns: auto;
+    }
+    .tablesectiondiv{
+        display: grid;
+        grid-template-columns: auto 1fr;
+    }
+    .leftsidetable .tableleft.gridbody{
+        display: grid;
+        grid-auto-flow: column;
+        height: auto;
+    }
+    .gridrow.column10{
+        grid-template-columns: auto;
+    }
+    .leftsidetable{
+        height: auto;
+    }
+}
+
+}
+

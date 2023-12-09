@@ -1,0 +1,145 @@
+@import '../../assets/scss/theme-light.scss';
+
+footer.footerMain {
+    font-size: 14px;
+    line-height: 25px;
+    color: $text-color;
+    position: relative;
+    background-color: $text-color;
+    &::before {
+        content: '';
+        background-size: cover;
+        position: absolute;
+        inset: 0;
+        background-position: right;
+        // max-height: 315px;
+        width: 100%;
+        background-repeat: no-repeat;
+    }
+    .footerSec {
+        padding: 50px 0px 30px;
+    }
+    .footerTxt {
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 24px;
+        color: $footer-text;        
+    }
+    .footerTitle {        
+        font-size: 16px;
+        font-weight: 700;
+        margin-bottom: 1.5rem !important;
+        position: relative;
+        color: $text-white;
+    }
+    .footerList {
+        margin-bottom: 0px;
+        padding-inline-start: 0;
+        li {
+            margin-bottom: 5px;
+            a {
+                color: $footer-text;
+                font-size: 14px;
+                font-weight: 400;
+                text-decoration: none;
+                &:hover {
+                    font-weight: 400;
+                    color: $primary-color;
+                    text-decoration: none;
+                }
+            }
+        }
+    }
+    .form-group.formInputs{
+        .form-control.footerinput {
+            background-color: #464950;
+            border-color: #464950;
+            color: $text-white;
+            height: 45px;
+            &::placeholder {
+                color: $footer-text;
+            }
+            &:focus {
+                border-color: $primary-color;
+                box-shadow: none;
+            }
+        }
+    }
+    
+    .socialmediaLinkbtn {
+        display: block;
+        margin-bottom: 20px;
+        text-align: center;
+        &:hover {
+            img {
+                filter: drop-shadow(1px 0px 2px $primary-color) grayscale(0.5);
+            }
+        }
+    }
+    // .btnprimary{
+    //     background: var(--primary-gradient);    
+    //     color: var(--text-white) !important;  
+    //     border: 1px solid transparent;
+    //     border-radius: 30px;  
+    //     padding: 8px 24px;
+    //     transition: all 0.3s ease;
+    //     &:hover{
+    //         background: transparent;
+    //         border-color: var(--primary);
+    //         color: var(--primary) !important;
+    //     }
+    // }
+    .Footersocials {
+        div {
+            display: inline-block;
+            a {
+                margin-right: 10px;
+                display: block;
+                // width: 37px;
+                // height: 37px;
+                // line-height: 37px;
+                // border-radius: 50%;
+                // background-color: #F6F7FA;
+                // text-align: center;
+                color: $text-white;
+                font-size: 18px;
+                // border: 1px solid transparent;
+                // img{
+                //     filter: none;
+                // }
+                &:hover {
+                    // background-color: transparent;
+                    // background-image: $primary-gradient-color;
+                    color: $primary-color;
+                    // img{                        
+                    //     filter: none;
+                    // }
+                }
+            }
+        }
+    }
+    .Footer-bottom {
+        .secondfooter {
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid #444444;
+            font-size: 14px;
+            font-weight: 400;
+            color: $footer-text;
+            // &::before{
+            // content: '';
+            // background-image: linear-gradient(to right, rgba(0,0,0,0.1), #6333ee, #884fe6, rgba(0,0,0,0.1));
+            // width: 50%;
+            // height: 1px;
+            // background-size: 100%;
+            // background-repeat: no-repeat;
+            // display: inline-block;
+            // position: absolute;
+            // top: -1px;
+            // right: 0;
+            // left: 0;
+            // margin: 0 auto;
+            // }
+        }
+    }
+}

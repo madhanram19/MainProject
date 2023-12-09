@@ -1,0 +1,62 @@
+$body-bg: #ffffff;
+$body-color: #000000;
+$border-radius: 0.5rem;
+$border-width: 1px;
+$font-family-base: 'Inter', sans-serif;
+$font-size-base: 0.875rem;
+
+$secondary-font: 'Rubik', sans-serif;
+
+
+$primary-gradient-color: radial-gradient(92.09% 85.42% at 86.3% 87.5%, rgba(0, 0, 0, 0.23) 0%, rgba(0, 0, 0, 0) 86.18%) /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */, 
+                         radial-gradient(65.28% 65.28% at 26.39% 20.83%, rgba(255, 255, 255, 0.413) 0%, rgba(255, 255, 255, 0) 69.79%, rgba(255, 255, 255, 0) 100%) /* warning: gradient uses a rotation that is not supported by CSS and may not behave as expected */, #805CFF;
+
+$primary-color: #805CFF;
+$text-black: #000000;
+$bg-header: #ffffff;
+$secondary-color: #F7F5FF;
+$text-lightblue: #50496A;
+$border-color: #ECE7FF;
+$text-gray: #707070;
+$text-red: #D02A2A;
+$text-green:#43941D;
+$secondary-dark: #4F1DFF;
+$footer-text: #E8E1FF;
+$text-gray2: #9D9D9D;
+$card-border: #E2E4EE;
+$text-color: #212326;
+$text-white: #ffffff;
+//$secondary-light: #;
+
+
+$dark-bg-0: #0B0B0B;
+
+
+$light-bg: #F4F5FA;
+$secondary-border-color: #B6D4FE;
+$text-dark: #084298;
+$light-text: #D6D6D6;
+$primary-border-color: #2d1481;
+$gray-text: #777777;
+$light-text2: #898989;
+$text-color-50:rgba(8,0,34,0.5);
+$bg-gray-color: #e7e7e7;
+$profileimg: linear-gradient(180deg, #663ebb 100%, #663ebb 0%);
+
+
+$theme-colors: (
+     "primary": $primary-color,
+     "secondary": #4F1DFF,
+     "light": #f4f5fa,
+     "danger": #D02A2A,
+     "success": #43941D,
+);
+
+// :root{
+//     --primary-gradient: linear-gradient(to bottom, #6333ee, #884fe6);    
+//     --primary: #a600ff;
+//     --bg-header: #f2f2f2;
+//     --text-color: #080022;
+//     --text-white: #ffffff;
+//     --border-color: #e6e5e8;    
+// }

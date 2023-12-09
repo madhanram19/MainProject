@@ -1,0 +1,40 @@
+@import '../../assets/scss/theme-light.scss';
+
+.top-header{
+    background-color: $secondary-color;
+    padding: 15px 0;
+    .nav
+    {
+        .nav-item{
+            margin-left: 10px;
+            .nav-link{
+                color: $text-black;
+                font-size: 14px;
+                font-weight: 400;
+                border-radius: 100px; 
+                padding: 11px 25px;
+                transition: all 0.3s linear;
+                .menu-name{
+                    position: relative;
+                    top:1px;
+                    margin-left: 8px;
+                }
+                &:hover{
+                    background: $primary-gradient-color;                    
+                    color: $text-white;                    
+                    img{
+                        filter: brightness(1)invert(1);
+                    }
+                }
+                &.active{
+                    background: $primary-gradient-color;                    
+                    color: $text-white;
+                    font-weight: 700;
+                    img{
+                        filter: brightness(1)invert(1);
+                    }
+                }
+            }
+        }
+    }
+}
