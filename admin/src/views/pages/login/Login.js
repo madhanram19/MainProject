@@ -18,13 +18,12 @@ import { cilLockLocked, cilUser } from '@coreui/icons'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { BsFillShieldFill, BsFillShieldSlashFill } from 'react-icons/bs'
-import { BiRightArrowAlt } from "react-icons/bi"
-import { ToastContainer, toast } from 'react-toastify';
+import { BiRightArrowAlt } from 'react-icons/bi'
+import { ToastContainer, toast } from 'react-toastify'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
 import PatternLock from 'react-pattern-lock'
 import { useAdminloginDataMutation } from 'src/appstore_admin/service_admin/apiquery_admin'
-
 
 const schema = yup.object().shape({
   email: yup.string().required('Email is required!').email('Invalid email'),
@@ -34,8 +33,8 @@ const schema = yup.object().shape({
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [pattern, setPattern] = useState([])
-  const [handleAdminlogin]=useAdminloginDataMutation()
-  const navigate=useNavigate()
+  const [handleAdminlogin] = useAdminloginDataMutation()
+  const navigate = useNavigate()
   // console.log(pattern);
   const {
     register,
@@ -50,43 +49,42 @@ const Login = () => {
     setPattern(value)
   }
   const resetPattern = () => {
-    setPattern([]);
-  };
+    setPattern([])
+  }
 
-  const onSubmit = async(data) => {
-    let admindata={
-      email:data.email,
-      password:data.password,
-      pattern
+  const onSubmit = async (data) => {
+    let admindata = {
+      email: data.email,
+      password: data.password,
+      pattern,
     }
-    const response= await handleAdminlogin(admindata)
-    console.log(response.data.authVerify)
+    const response = await handleAdminlogin(admindata)
+    // console.log(response.data?.authVerify)
 
-      
     if (response.error) {
       toast.error(response.error.data.message)
-    } else{
-      const twoFactorStatus =response.data.authVerify
-      let AdminId = response.data.adminId;
-      let token=response.data.token;
+    } else {
+      const twoFactorStatus = response.data.authVerify
+      let AdminId = response.data.adminId
+      let token = response.data.token
       JSON.stringify(localStorage.setItem('token', token))
       JSON.stringify(localStorage.setItem('AdminId', AdminId))
 
       toast.success(response.data.message, {
         position: toast.POSITION.TOP_CENTER,
-      });
+      })
       reset()
       resetPattern()
-      if(!twoFactorStatus){
+      if (!twoFactorStatus) {
         setTimeout(() => {
           navigate('/twofactor')
-        }, 2600);
+        }, 2600)
         return
       }
 
       setTimeout(() => {
         navigate('/dashboard')
-      }, 2600);
+      }, 2600)
     }
   }
 
@@ -99,7 +97,7 @@ const Login = () => {
               <CCard className="p-4">
                 <CCardBody>
                   <form onSubmit={handleSubmit(onSubmit)}>
-                    <h2 className='text-primary'>Admin-Login</h2>
+                    <h2 className="text-primary">Admin-Login</h2>
                     <p className=" text-primary input-group-text">Sign In to your account</p>
                     <div className="form-row  ">
                       <div className="form-group col">
@@ -136,14 +134,14 @@ const Login = () => {
                         </div>
                       </div>
                     </div>
-
                     <div className="form-group d-grid mt-4">
                       <button type="submit" className="btn btn-primary mr-1">
-                       Login <BiRightArrowAlt />
+                        Login <BiRightArrowAlt />
                       </button>
-                    </div><br/>
-                    <Link to='/passwordmail'>Forgot password</Link>&nbsp;&nbsp;
-                    <Link to='/patternmail'>Forgot pattern</Link>
+                    </div>
+                    <br />
+                    <Link to="/passwordmail">Forgot password</Link>&nbsp;&nbsp;
+                    <Link to="/patternmail">Forgot pattern</Link>
                   </form>
                 </CCardBody>
               </CCard>
@@ -156,15 +154,22 @@ const Login = () => {
                     size={3}
                     path={pattern}
                     onChange={(val) => handlePatternComplete(val)}
-                    onFinish={() => {
-                    
-                    }}
+                    onFinish={() => {}}
                     className="bg-primary ms-3 mt-3 text-center"
                   />
-                  <button className='btn btn-input-group btn-primary text-white' type='reset' onClick={()=>{ reset();resetPattern();}}>Reset <BiRightArrowAlt /></button>
+                  <button
+                    className="btn btn-input-group btn-primary text-white"
+                    type="reset"
+                    onClick={() => {
+                      reset()
+                      resetPattern()
+                    }}
+                  >
+                    Reset <BiRightArrowAlt />
+                  </button>
                 </CCardBody>
               </CCard>
-              <ToastContainer/>
+              <ToastContainer />
             </CCardGroup>
           </CCol>
         </CRow>

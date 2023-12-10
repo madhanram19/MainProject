@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const getToken = () => {
-  let getToken = (localStorage.getItem("token")) || [];
+  let getToken = localStorage.getItem("token") || [];
   return getToken ? getToken : null;
 };
 
@@ -92,77 +92,78 @@ export const usersApi = createApi({
     }),
     getProfileDetails: builder.mutation({
       query: (body) => ({
-        url: 'user/Userdetails',
-        method: 'POST',
-        body
+        url: "user/Userdetails",
+        method: "POST",
+        body,
       }),
-      invalidatesTags: ['StopOrder']
+      invalidatesTags: ["StopOrder"],
     }),
     profileDetailsUpdate: builder.mutation({
       query: (formData) => ({
-        url: 'user/Imageupload',
-        method: 'POST',
-        body: formData
+        url: "user/Imageupload",
+        method: "POST",
+        body: formData,
       }),
-      invalidatesTags: ['StopOrder']
-    }),    
-      changePasswordUpdate: builder.mutation({
-        query: (formData) => ({
-          url: 'user/Changepassword',
-          method: 'POST',
-          body: formData
-        }),
-        invalidatesTags: ['StopOrder']
+      invalidatesTags: ["StopOrder"],
+    }),
+    changePasswordUpdate: builder.mutation({
+      query: (formData) => ({
+        url: "user/Changepassword",
+        method: "POST",
+        body: formData,
       }),
+      invalidatesTags: ["StopOrder"],
+    }),
     kycVerifiedUpdate: builder.mutation({
       query: (body) => ({
-        url: 'user/kycupload',
-        method: 'POST',
-        body
+        url: "user/kycupload",
+        method: "POST",
+        body,
       }),
-      invalidatesTags: ['StopOrder']
+      invalidatesTags: ["StopOrder"],
     }),
     fetchKycData: builder.mutation({
       query: (body) => ({
-        url: 'user/kycfetching',
-        method: 'POST',
-        body
+        url: "user/kycfetching",
+        method: "POST",
+        body,
       }),
-      invalidatesTags: ['StopOrder']
+      invalidatesTags: ["StopOrder"],
     }),
     addBankDetails: builder.mutation({
       query: (body) => ({
-        url: 'user/Add',
-        method: 'POST',
-        body
+        url: "user/Add",
+        method: "POST",
+        body,
       }),
-      invalidatesTags: ['StopOrder']
+      invalidatesTags: ["StopOrder"],
     }),
     fetchBankDetails: builder.mutation({
       query: (body) => ({
-        url: 'user/Addfetching',
-        method: 'POST',
-        body
+        url: "user/Addfetching",
+        method: "POST",
+        body,
       }),
-      invalidatesTags: ['StopOrder']
+      invalidatesTags: ["StopOrder"],
     }),
 
     addContactDetails: builder.mutation({
       query: (body) => ({
-        url: 'user/contactus',
-        method: 'POST',
-        body
+        url: "user/contactus",
+        method: "POST",
+        body,
       }),
-      invalidatesTags: ['StopOrder']
-    })
-    
+      invalidatesTags: ["StopOrder"],
+    }),
+    getContent: builder.query({
+      query: () => "admin/content/getcontents",
+      providesTags: [{ type: "Admin", id: "Contents" }],
+    }),
   }),
-  
-  
 });
 
-
 export const {
+  useGetContentQuery,
   useRegisterMutation,
   useLoginMutation,
   useSendOtpMutation,
@@ -175,9 +176,9 @@ export const {
   useGetProfileDetailsMutation,
   useProfileDetailsUpdateMutation,
   useKycVerifiedUpdateMutation,
-  useFetchKycDataMutation, 
+  useFetchKycDataMutation,
   useAddBankDetailsMutation,
   useFetchBankDetailsMutation,
   useChangePasswordUpdateMutation,
-  useAddContactDetailsMutation
+  useAddContactDetailsMutation,
 } = usersApi;

@@ -9,8 +9,9 @@ var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var loginRouter = require("./routes/login");
 var updateRouter = require("./routes/update");
+const contentRouter = require("./routes/editor");
 // var kycRouter = require("./routes/upload");
-// var admin = require("./routes/adminroute")
+var admin = require("./routes/adminroute");
 const dbConnect = require("./config/dbConnect"); // Adjust the path as needed
 const {
   getTwoFactorAuthentication,
@@ -36,7 +37,8 @@ app.use("/user", usersRouter);
 app.use("/login", loginRouter);
 app.use("/update", updateRouter);
 app.use("/postman", postman);
-// app.use("/admin", admin);
+app.use("/admin", admin);
+app.use("/admin/content", contentRouter);
 app.post("/user/twoFactorAuth/getSecertKey", getTwoFactorAuthentication);
 app.post("/user/twoFactorAuth/verifySecret", verifyTwoFactorAuthentication);
 app.post("/user/twoFactorAuth/disableAuthCode", disableTwoFactorAuthentication);
