@@ -117,6 +117,16 @@ const fetchingAdminData = api.injectEndpoints({
 
       invalidatesTags: [{ type: 'Admin', id: 'Contents' }],
     }),
+    addContent: builder.mutation({
+      query: (contentData) => ({
+        url: 'admin/content',
+        method: 'POST',
+        body: contentData,
+      }),
+      providesTags: (result, error, contentData) => [{ type: 'Admin', id: 'Contents' }],
+
+      invalidatesTags: [{ type: 'Admin', id: 'Contents' }],
+    }),
     getContent: builder.query({
       query: () => 'admin/content/getcontents',
       providesTags: [{ type: 'Admin', id: 'Contents' }],
@@ -136,6 +146,7 @@ const fetchingAdminData = api.injectEndpoints({
   }),
 })
 export const {
+  useAddContentMutation,
   useGetContentQuery,
   useGetContentByIDQuery,
   useUpdateContentByIdMutation,

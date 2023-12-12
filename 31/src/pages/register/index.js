@@ -1,47 +1,48 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as Yup from "yup";
-import { useNavigate } from "react-router-dom";
-import "react-toastify/dist/ReactToastify.css";
-import user from "../../assets/images/user.png";
-import lock from "../../assets/images/lock.png";
-import login_bg from "../../assets/images/login_bg.png";
-import message from "../../assets/images/message.png";
-import { sendOtp } from "../../utils/users";
-import { useRegisterMutation, useSendOtpMutation } from "../../redux/api";
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
+import { useNavigate } from 'react-router-dom';
+import 'react-toastify/dist/ReactToastify.css';
+import user from '../../assets/images/user.png';
+import lock from '../../assets/images/lock.png';
+import login_bg from '../../assets/images/login_bg.png';
+import message from '../../assets/images/message.png';
+import { sendOtp } from '../../utils/users';
+import { useRegisterMutation, useSendOtpMutation } from '../../redux/api';
+import { toast } from 'react-toastify';
 
 const Registerpage = () => {
   const navigate = useNavigate();
   const validationSchema = Yup.object().shape({
     name: Yup.string()
-      .required(" Name is required")
+      .required(' Name is required')
       .matches(
         /^[_A-zA-Z]*((-|\s)*[_A-zA-Z])*$/g,
-        "Name is Should be characters only"
+        'Name is Should be characters only'
       )
       .trim(),
 
     email: Yup.string()
-      .required("Email is required")
-      .matches(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, "Enter valid Email")
-      .email("Email is invalid")
+      .required('Email is required')
+      .matches(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, 'Enter valid Email')
+      .email('Email is invalid')
       .trim(),
     password: Yup.string()
-      .required("Password is required")
-      .min(8, "Password must be at least 8 characters")
+      .required('Password is required')
+      .min(8, 'Password must be at least 8 characters')
       .matches(
         /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-        "Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character"
+        'Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character'
       )
       .trim(),
 
     confirmPassword: Yup.string()
-      .required("Confirm Password is required")
-      .oneOf([Yup.ref("password"), null], "Passwords must match"),
-    acceptTerms: Yup.bool().oneOf([true], "Accept TC & DPG is required"),
+      .required('Confirm Password is required')
+      .oneOf([Yup.ref('password'), null], 'Passwords must match'),
+    acceptTerms: Yup.bool().oneOf([true], 'Accept TC & DPG is required'),
   });
 
   // functions to build form returned by useForm() hook
@@ -52,16 +53,18 @@ const Registerpage = () => {
     formState: { errors },
   } = useForm({
     resolver: yupResolver(validationSchema),
-    mode: "all",
+    mode: 'all',
   });
   const [sendOtp] = useSendOtpMutation();
   async function onSubmit(data) {
-    console.log(data);
-    sessionStorage.setItem("loggedInCredentials", JSON.stringify(data));
+    sessionStorage.setItem('loggedInCredentials', JSON.stringify(data));
     const response = await sendOtp(data);
     if (!response.error) {
-      navigate("/securitycode");
+      toast.success('registered successfully');
+      navigate('/securitycode');
       //
+    } else {
+      toast.error(response.error.data.message);
     }
   }
 
@@ -89,17 +92,17 @@ const Registerpage = () => {
                             <input
                               name="name"
                               type="text"
-                              {...register("name")}
+                              {...register('name')}
                               className={`form-control ${
-                                errors.name ? "is-invalid" : ""
+                                errors.name ? 'is-invalid' : ''
                               }`}
                               placeholder="Enter Your Name"
                             />
                             <div
                               className="invalid-feedback"
                               style={{
-                                marginLeft: "10%",
-                                fontFamily: "monospace",
+                                marginLeft: '10%',
+                                fontFamily: 'monospace',
                               }}
                             >
                               {errors.name?.message}
@@ -116,17 +119,17 @@ const Registerpage = () => {
                             <input
                               name="email"
                               type="text"
-                              {...register("email")}
+                              {...register('email')}
                               className={`form-control ${
-                                errors.email ? "is-invalid" : ""
+                                errors.email ? 'is-invalid' : ''
                               }`}
                               placeholder="Enter Your Email Id"
                             />
                             <div
                               className="invalid-feedback"
                               style={{
-                                marginLeft: "10%",
-                                fontFamily: "monospace",
+                                marginLeft: '10%',
+                                fontFamily: 'monospace',
                               }}
                             >
                               {errors.email?.message}
@@ -143,17 +146,17 @@ const Registerpage = () => {
                             <input
                               name="password"
                               type="password"
-                              {...register("password")}
+                              {...register('password')}
                               className={`form-control ${
-                                errors.password ? "is-invalid" : ""
+                                errors.password ? 'is-invalid' : ''
                               }`}
                               placeholder="Enter Your Password"
                             />
                             <div
                               className="invalid-feedback"
                               style={{
-                                marginLeft: "10%",
-                                fontFamily: "monospace",
+                                marginLeft: '10%',
+                                fontFamily: 'monospace',
                               }}
                             >
                               {errors.password?.message}
@@ -170,17 +173,17 @@ const Registerpage = () => {
                             <input
                               name="confirmPassword"
                               type="password"
-                              {...register("confirmPassword")}
+                              {...register('confirmPassword')}
                               className={`form-control ${
-                                errors.confirmPassword ? "is-invalid" : ""
+                                errors.confirmPassword ? 'is-invalid' : ''
                               }`}
                               placeholder="Enter Your Confirm Password"
                             />
                             <div
                               className="invalid-feedback"
                               style={{
-                                marginLeft: "10%",
-                                fontFamily: "monospace",
+                                marginLeft: '10%',
+                                fontFamily: 'monospace',
                               }}
                             >
                               {errors.confirmPassword?.message}
@@ -192,10 +195,10 @@ const Registerpage = () => {
                             <input
                               name="acceptTerms"
                               type="checkbox"
-                              {...register("acceptTerms")}
+                              {...register('acceptTerms')}
                               id="acceptTerms"
                               className={`custom-control-input ${
-                                errors.acceptTerms ? "is-invalid" : ""
+                                errors.acceptTerms ? 'is-invalid' : ''
                               }`}
                             />
                             <label
@@ -207,7 +210,7 @@ const Registerpage = () => {
                                 to="/terms"
                                 className="d-inline-block text-primary"
                               >
-                                {" "}
+                                {' '}
                                 Terms and Conditions
                               </Link>
                               &nbsp;and&nbsp;
@@ -221,8 +224,8 @@ const Registerpage = () => {
                             <div
                               className="invalid-feedback"
                               style={{
-                                marginLeft: "10%",
-                                fontFamily: "monospace",
+                                marginLeft: '10%',
+                                fontFamily: 'monospace',
                               }}
                             >
                               {errors.acceptTerms?.message}
@@ -239,7 +242,7 @@ const Registerpage = () => {
                         </div>
                       </form>
                       <div className="text-gray2 text-center fs-15 fw-600">
-                        Already have an account{" "}
+                        Already have an account{' '}
                         <Link
                           to="/"
                           className="d-inline-block fw-700 text-primary"

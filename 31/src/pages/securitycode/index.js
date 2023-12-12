@@ -1,31 +1,31 @@
-import React, { useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import locked_Img from "../../assets/images/locked_Img.png";
-import { useRegisterMutation } from "../../redux/api";
-import OTPInput from "otp-input-react";
+import React, { useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import locked_Img from '../../assets/images/locked_Img.png';
+import { useRegisterMutation } from '../../redux/api';
+import OTPInput from 'otp-input-react';
 
 const Securitycode = () => {
   const [searchParams] = useSearchParams();
-  const isForgotPassword = searchParams.get("isForgotPassword");
-  const [otp, setOtp] = useState("");
+  const isForgotPassword = searchParams.get('isForgotPassword');
+  const [otp, setOtp] = useState('');
   const [registerNewUser] = useRegisterMutation();
   const navigate = useNavigate();
   const onSubmit = async () => {
     if (isForgotPassword) {
-      const otpCode = sessionStorage.getItem("otpCode");
+      const otpCode = sessionStorage.getItem('otpCode');
       if (otp === otpCode) {
-        navigate("/resetpassword");
+        navigate('/resetpassword');
       } else {
-        alert("wrong otp");
+        alert('wrong otp');
       }
     } else {
-      const cred = sessionStorage.getItem("loggedInCredentials");
+      const cred = sessionStorage.getItem('loggedInCredentials');
       const response = await registerNewUser({
         ...(cred && JSON.parse(cred)),
         otp,
       });
       if (!response.error) {
-        navigate("/");
+        navigate('/');
       }
     }
   };

@@ -1,6 +1,8 @@
 import React, { Component, Suspense } from 'react'
 import { BrowserRouter, HashRouter, Route, Routes } from 'react-router-dom'
 import './scss/style.scss'
+import SiteSetting from './views/pages/sitesettings/SiteSettings'
+import AddContent from './views/pages/ckeditor/addContent'
 
 const loading = (
   <div className="pt-3 text-center">
@@ -43,7 +45,9 @@ class App extends Component {
             <Route exact path="/changepattern" element={<Changepattern />} />
             <Route exact path="/passwordmail" element={<Forgotmailpassword />} />
             <Route exact path="/patternmail" element={<Forgotmailpattern />} />
-            <Route exact path="/ckeditor" element={<CKEditor />} />
+            <Route exact path="/ckeditor/:id" element={<CKEditor />} />
+            <Route exact path="/sitesettings" element={<SiteSetting />} />
+            <Route exact path="/addcontent" element={<AddContent />} />
             <Route
               exact
               path="/forgetPasswordAuthCodeVerify"

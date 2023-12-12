@@ -1,22 +1,25 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-import user from "../../assets/images/user.png";
-import lock from "../../assets/images/lock.png";
-import login_bg from "../../assets/images/login_bg.png";
-import message from "../../assets/images/message.png";
-import { useGetContentQuery } from "../../redux/api";
-import { useEffect } from "react";
-import { useState } from "react";
+import user from '../../assets/images/user.png';
+import lock from '../../assets/images/lock.png';
+import login_bg from '../../assets/images/login_bg.png';
+import message from '../../assets/images/message.png';
+import { useGetContentQuery } from '../../redux/api';
+import { useEffect } from 'react';
+import { useState } from 'react';
 
 const Registerpage = () => {
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState('');
   const { data, isLoading, isError } = useGetContentQuery();
 
-  const contentForEdit = data?.data?.[0].editorData;
+  const contentForEdit = data?.data;
 
   useEffect(() => {
-    if (contentForEdit) setContent(contentForEdit);
+    const aboutUs = contentForEdit?.filter(
+      (data) => data.content === 'About Us'
+    )?.[0]?.editorData;
+    if (contentForEdit) setContent(aboutUs);
   }, [contentForEdit]);
   return (
     <div className="maincontent">

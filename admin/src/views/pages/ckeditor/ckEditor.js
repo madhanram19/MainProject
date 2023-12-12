@@ -1,25 +1,25 @@
 import React, { useState, useEffect } from 'react'
 import { CKEditor } from '@ckeditor/ckeditor5-react'
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
-import { useNavigate, Link } from 'react-router-dom'
+import { useParams, useNavigate, Link } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import Swal from 'sweetalert2'
 import {
   useGetContentByIDQuery,
-  useGetContentQuery,
   useUpdateContentByIdMutation,
 } from 'src/appstore_admin/service_admin/apiquery_admin'
 
 const CkEditor = () => {
+  const [content, setContent] = useState(null)
   const navigate = useNavigate()
+  const params = useParams()
+  // console.log(params.id);
   const [isEditorEmpty, setIsEditorEmpty] = useState(true)
-  const [content, setContent] = useState('')
-  const { data, isLoading, isError } = useGetContentQuery()
+  const { data, isLoading, isError } = useGetContentByIDQuery(params.id)
   const [updateContent] = useUpdateContentByIdMutation()
 
-  // right now, assumed it always has one document at a time
-  // if needed, use getContentById api and change it accordingly if multiple documents needed
-  const contentForEdit = data?.data?.[0].editorData
+  const contentForEdit = data?.data.editorData
+  // console.log(contentForEdit);
 
   useEffect(() => {
     if (contentForEdit) {
@@ -36,7 +36,7 @@ const CkEditor = () => {
   }
 
   const handleSubmit = async () => {
-    const res = await updateContent({ id: data?.data?.[0]?._id, updatedData: content })
+    const res = await updateContent({ id: params.id, updatedData: content })
 
     if (!res.error) {
       Swal.fire({
@@ -44,14 +44,13 @@ const CkEditor = () => {
         title: 'Content Updated!',
         text: 'Your content has been updated successfully.',
       }).then(() => {
-        // navigate('/sitesettings')
+        navigate('/sitesettings')
       })
     } else {
       toast.error(res.error.data.message)
     }
   }
 
-  console.log({ data })
   return (
     <div id="editor-container">
       {' '}
