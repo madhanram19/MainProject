@@ -30,6 +30,8 @@ const ForgetPatternAuthCodeVerify = React.lazy(() =>
   import('./views/pages/forgotpattern/ForgetPatternAuthCodeVerify'),
 )
 
+const VerifyKyc = React.lazy(() => import('./views/pages/verifyKyc/VerifyKyc'))
+
 const Page404 = React.lazy(() => import('./views/pages/page404/Page404'))
 const Page500 = React.lazy(() => import('./views/pages/page500/Page500'))
 
@@ -48,6 +50,7 @@ class App extends Component {
             <Route exact path="/ckeditor/:id" element={<CKEditor />} />
             <Route exact path="/sitesettings" element={<SiteSetting />} />
             <Route exact path="/addcontent" element={<AddContent />} />
+            <Route exact path="/verifyKyc" element={<VerifyKyc />} />
             <Route
               exact
               path="/forgetPasswordAuthCodeVerify"

@@ -143,9 +143,35 @@ const fetchingAdminData = api.injectEndpoints({
       }),
       invalidatesTags: [{ type: 'Admin', id: 'Contents' }],
     }),
+    getUsersKyc: builder.query({
+      query: () => ({
+        url: `admin/getUsersKyc`,
+        method: 'GET',
+      }),
+      invalidatesTags: [{ type: 'Admin' }],
+    }),
+    updateSingeRecordInKyc: builder.mutation({
+      query: (updatedData) => ({
+        url: `admin/updateSingeRecordInKyc`,
+        method: 'POST',
+        body: updatedData,
+      }),
+      invalidatesTags: [{ type: 'Admin' }],
+    }),
+    updateAllRecordsInKyc: builder.mutation({
+      query: (updatedData) => ({
+        url: `admin/updateAllRecordsInKyc`,
+        method: 'POST',
+        body: updatedData,
+      }),
+      invalidatesTags: [{ type: 'Admin' }],
+    }),
   }),
 })
 export const {
+  useUpdateAllRecordsInKycMutation,
+  useUpdateSingeRecordInKycMutation,
+  useGetUsersKycQuery,
   useAddContentMutation,
   useGetContentQuery,
   useGetContentByIDQuery,

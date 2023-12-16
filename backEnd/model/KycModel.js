@@ -1,43 +1,60 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const kycSchema = new mongoose.Schema({
-    aadharName: {
+  aadharName: {
+    type: String,
+    required: true,
+  },
+  aadharNumber: {
+    type: String,
+    required: true,
+  },
+  selectCountry: {
+    type: String,
+    required: true,
+  },
+  aadharFront: {
+    type: String,
+    required: true,
+  },
+  aadharBack: {
+    type: String,
+    required: true,
+  },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Users',
+    required: true,
+  },
+  kycVerifiy: {
+    type: Boolean,
+    default: false,
+  },
+  waitingStatus: {
+    type: Boolean,
+    default: true,
+  },
+  errorStatus: [
+    {
+      field: {
         type: String,
-        required: true
-    },
-    aadharNumber: {
-        type: String,
-        required: true
-    },
-    selectCountry: {
-        type: String,
-        required: true
-    },
-    aadharFront: {
-        type: String,
-        required: true
-    },
-    aadharBack: {
-        type: String,
-        required: true
-    },
-    userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Users',
-        required: true
-    }
-    ,
-    kycVerifiy: {
+      },
+      status: {
         type: Boolean,
-        default: false
-    },
-    waitingStatus: {
+        default: false,
+      },
+      message: {
+        type: String,
+        default: '',
+      },
+      isUpdated: {
         type: Boolean,
-        default: true
-    }
-})
+        default: false,
+      },
+    },
+  ],
+});
 
+const kycModal = mongoose.model('UserKyc', kycSchema);
 
-const kycModal = mongoose.model('UserKyc', kycSchema)
-
-module.exports = kycModal 
+module.exports = kycModal;

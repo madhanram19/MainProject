@@ -1,17 +1,56 @@
 // If you want to override variables do it here
-@import "variables";
+@import 'variables';
 
 $enable-ltr: true;
 $enable-rtl: true;
 
 // Import CoreUI for React components library
-@import "@coreui/coreui/scss/coreui";
+@import '@coreui/coreui/scss/coreui';
 
 // Import Chart.js custom tooltips styles
-@import "@coreui/chartjs/scss/coreui-chartjs";
+@import '@coreui/chartjs/scss/coreui-chartjs';
 
-@import "layout";
-@import "example";
+@import 'layout';
+@import 'example';
 
 // If you want to add custom CSS you can put it here.
-@import "custom";
+@import 'custom';
+
+.flex-column {
+  flex-direction: column;
+  gap: 12px;
+}
+
+.approve {
+  background-color: #28a745; /* Green color */
+  color: #fff; /* White text color */
+  padding: 6px 12px;
+  border: none;
+  width: 100%;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.approve:hover {
+  background-color: #218838; /* Darker green color on hover */
+}
+
+.reject {
+  background-color: #dc3545; /* Red color */
+  color: #fff; /* White text color */
+  padding: 6px 12px;
+  width: 100%;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.reject:hover {
+  background-color: #c82333; /* Darker red color on hover */
+}
+
+button:disabled {
+  cursor: not-allowed;
+}

@@ -134,7 +134,7 @@ router.post('/send-otp', async (req, res) => {
   const email = req.body.email;
 
   const user = await Otp.findOne({ email });
-  if (user.email === email) {
+  if (user?.email === email) {
     return res.status(401).json({ message: 'User Already Exists' });
   }
 
@@ -427,6 +427,14 @@ router.post('/kycupload', async (req, res) => {
       }
       try {
         const { aadharName, aadharNumber, selectCountry, id } = req.body;
+        const errorStatus = [
+          'aadharName',
+          'aadharNumber',
+          'selectCountry',
+          'aadharFront',
+          'aadharBack',
+        ].map((data) => ({ field: data }));
+
         const kycUpdate = {
           aadharName,
           aadharNumber,
@@ -434,6 +442,7 @@ router.post('/kycupload', async (req, res) => {
           aadharFront: path.join('images/', req.files.aadharFront[0].filename),
           aadharBack: path.join('images/', req.files.aadharBack[0].filename),
           userId: id,
+          errorStatus,
         };
         kycModal
           .create(kycUpdate)

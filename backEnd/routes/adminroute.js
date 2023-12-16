@@ -1,15 +1,16 @@
-const jwt = require("jsonwebtoken");
-const speakEasy = require("@levminer/speakeasy");
-const bcrypt = require("bcrypt");
-const qrCode = require("qrcode");
-var express = require("express");
+const jwt = require('jsonwebtoken');
+const speakEasy = require('@levminer/speakeasy');
+const bcrypt = require('bcrypt');
+const qrCode = require('qrcode');
+var express = require('express');
 var router = express.Router();
-const adminschema = require("../model/admin");
+const adminschema = require('../model/admin');
+const kycModal = require('../model/KycModel');
 
 //localhost:4500/admin/createAdmin
-router.get("/createAdmin", async (req, res) => {
-  const email = "madhanram1999@gmail.com";
-  const password = await bcrypt.hash("123456", 10);
+router.get('/createAdmin', async (req, res) => {
+  const email = 'madhanram1999@gmail.com';
+  const password = await bcrypt.hash('123456', 10);
   const pattern = JSON.stringify([0, 1, 2, 5]);
 
   const admin = new adminschema({
@@ -19,30 +20,30 @@ router.get("/createAdmin", async (req, res) => {
   });
   try {
     await admin.save();
-    return res.send("admin created successfully");
+    return res.send('admin created successfully');
   } catch (error) {
-    return res.send("admin creation failed");
+    return res.send('admin creation failed');
   }
 });
 
-router.post("/adminlogin", async (req, res) => {
+router.post('/adminlogin', async (req, res) => {
   const { email, password, pattern } = req.body;
   const loginAdmin = await adminschema.findOne({
     email: email,
   });
   if (!loginAdmin)
-    res.status(404).json({ message: "Please enter Correct Email" });
+    res.status(404).json({ message: 'Please enter Correct Email' });
   const patternverify = JSON.stringify(pattern);
   try {
     const decodedPwd = await bcrypt.compare(password, loginAdmin.password);
     if (!decodedPwd) {
-      return res.status(404).json({ message: "please enter correct password" });
+      return res.status(404).json({ message: 'please enter correct password' });
     } else if (loginAdmin.pattern !== patternverify) {
-      return res.status(404).json({ message: "please enter correct pattern" });
+      return res.status(404).json({ message: 'please enter correct pattern' });
     } else {
       const adminId = loginAdmin._id;
-      const token = jwt.sign({ adminId: loginAdmin._id }, "secretKey", {
-        expiresIn: "1h",
+      const token = jwt.sign({ adminId: loginAdmin._id }, 'secretKey', {
+        expiresIn: '1h',
       });
       return res.status(200).json({
         message: `Admin Login sucesssfully 
@@ -53,11 +54,11 @@ router.post("/adminlogin", async (req, res) => {
       });
     }
   } catch (error) {
-    console.log(error, "adminlogin error");
+    console.log(error, 'adminlogin error');
   }
 });
 
-router.post("/adminlogin/twoFactorGetCode", async (req, res) => {
+router.post('/adminlogin/twoFactorGetCode', async (req, res) => {
   try {
     const { id } = req.body;
     console.log(id);
@@ -75,10 +76,10 @@ router.post("/adminlogin/twoFactorGetCode", async (req, res) => {
       twoFactorAuthData.temp_secret.otpauth_url,
       function (err, data) {
         if (err) {
-          return res.status(404).json({ message: "Generating QrCode Error" });
+          return res.status(404).json({ message: 'Generating QrCode Error' });
         }
         res.status(200).json({
-          message: "Generate TwoFactorAuth",
+          message: 'Generate TwoFactorAuth',
           authCode: secretCode.base32,
           qrCodeImgSrc: data,
           twoFactorAuthData,
@@ -87,13 +88,13 @@ router.post("/adminlogin/twoFactorGetCode", async (req, res) => {
     );
   } catch (error) {
     res.status(500).json({
-      message: "Error Generating TwoFactor Secret",
+      message: 'Error Generating TwoFactor Secret',
       error: error.message,
     });
   }
 });
 
-router.post("/adminlogin/twoFactorVerify", async (req, res) => {
+router.post('/adminlogin/twoFactorVerify', async (req, res) => {
   try {
     const { id, token } = req.body;
     console.log(id, token);
@@ -102,20 +103,20 @@ router.post("/adminlogin/twoFactorVerify", async (req, res) => {
 
     let tokenValidates = speakEasy.totp.verify({
       secret,
-      encoding: "base32",
+      encoding: 'base32',
       token,
     });
 
     let qrCodeVerify = speakEasy.totp.verify({
       secret: getUser.temp_secret.ascii,
-      encoding: "ascii",
+      encoding: 'ascii',
       token,
     });
     if (!qrCodeVerify) {
-      return res.status(401).json({ message: "Authentication Invalid" });
+      return res.status(401).json({ message: 'Authentication Invalid' });
     }
     if (!tokenValidates) {
-      return res.status(401).json({ message: "Authentication Invalid Token" });
+      return res.status(401).json({ message: 'Authentication Invalid Token' });
     }
 
     await adminschema.updateOne(
@@ -130,34 +131,34 @@ router.post("/adminlogin/twoFactorVerify", async (req, res) => {
     );
     const updateUser = await adminschema.findOne({ _id: id });
     res.status(200).json({
-      message: "Authentication Verified",
+      message: 'Authentication Verified',
       twoFactorAuth: updateUser.twoFactorAuth,
     });
   } catch (err) {
     res.status(500).json({
-      message: "Error Generating Authencation verify ",
+      message: 'Error Generating Authencation verify ',
       error: err.message,
     });
   }
 });
 
-router.post("/adminlogin/disableTwoFactor", async (req, res) => {
+router.post('/adminlogin/disableTwoFactor', async (req, res) => {
   try {
     const { id } = req.body;
     await adminschema.updateOne(
       { _id: id },
       { $set: { secret: null, authVerify: false } }
     );
-    res.status(200).json({ message: "Disabled Your Authetication" });
+    res.status(200).json({ message: 'Disabled Your Authetication' });
   } catch (error) {
     res.status(500).json({
-      message: "Error Disable Your Authentication",
+      message: 'Error Disable Your Authentication',
       error: error.message,
     });
   }
 });
 
-router.post("/changepassword", async (req, res) => {
+router.post('/changepassword', async (req, res) => {
   const { oldPassword, newPassword } = req.body.data;
   const { id } = req.body;
   const loginexists = await adminschema.findOne({ _id: id });
@@ -172,11 +173,11 @@ router.post("/changepassword", async (req, res) => {
 
   try {
     if (!adminpswdecrypt) {
-      return res.status(401).json({ message: "password mis-match" });
+      return res.status(401).json({ message: 'password mis-match' });
     } else if (newpassworddata) {
       return res
         .status(401)
-        .json({ message: "both old and new password same!" });
+        .json({ message: 'both old and new password same!' });
     } else {
       const encryptnewpassword = await bcrypt.hash(newPassword, 10);
       await adminschema.updateOne(
@@ -187,32 +188,32 @@ router.post("/changepassword", async (req, res) => {
       );
       return res
         .status(200)
-        .json({ message: "Admin Password changed sucessfully!" });
+        .json({ message: 'Admin Password changed sucessfully!' });
     }
   } catch (error) {
     console.error(error.message);
-    res.status(500).send("network error");
+    res.status(500).send('network error');
   }
 });
 
-router.post("/oldPattern", async (req, res) => {
+router.post('/oldPattern', async (req, res) => {
   const pattern = JSON.stringify(req.body.oldpattern);
   try {
     const handleOldPassword = await adminschema.findOne({
       _id: req.body.adminId,
     });
     if (pattern === handleOldPassword.pattern) {
-      return res.status(200).json({ message: "pattern valid successfully" });
+      return res.status(200).json({ message: 'pattern valid successfully' });
     } else {
-      return res.status(401).json({ message: " invalid pattern" });
+      return res.status(401).json({ message: ' invalid pattern' });
     }
   } catch (error) {
-    return res.status(401).json({ message: " invalid pattern" });
-    console.log(error, "admin changepattern error");
+    return res.status(401).json({ message: ' invalid pattern' });
+    console.log(error, 'admin changepattern error');
   }
 });
 
-router.post("/newPattern", async (req, res) => {
+router.post('/newPattern', async (req, res) => {
   // console.log(req.body);
   const { newpattern, adminId } = req.body;
   const pattern = JSON.stringify(newpattern);
@@ -223,35 +224,35 @@ router.post("/newPattern", async (req, res) => {
     });
 
     if (pattern === exisistPattern.pattern) {
-      return res.status(409).json({ message: "Already exisist Pattern " });
+      return res.status(409).json({ message: 'Already exisist Pattern ' });
     }
     await adminschema.updateOne(
       { _id: adminId },
       { $set: { pattern: pattern } }
     );
-    res.status(200).json({ message: "NewPattern Updated sucessfully" });
+    res.status(200).json({ message: 'NewPattern Updated sucessfully' });
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
 });
 
-router.post("/forgetPassword/verifyEmail", async (req, res) => {
+router.post('/forgetPassword/verifyEmail', async (req, res) => {
   // console.log(req.body);
   try {
     const { email } = req.body;
     const adminData = await adminschema.findOne({ email });
     if (!adminData) {
-      return res.status(401).json({ message: "User Not Found" });
+      return res.status(401).json({ message: 'User Not Found' });
     }
-    res.status(200).json({ message: "Email Verified", adminData });
+    res.status(200).json({ message: 'Email Verified', adminData });
   } catch (err) {
     res
       .status(500)
-      .json({ message: "Internal Server Error", error: err.message });
+      .json({ message: 'Internal Server Error', error: err.message });
   }
 });
 
-router.post("/login/loginTwoFactorVerify", async (req, res) => {
+router.post('/login/loginTwoFactorVerify', async (req, res) => {
   // console.log(req.body);
   try {
     const { id, token } = req.body;
@@ -260,31 +261,31 @@ router.post("/login/loginTwoFactorVerify", async (req, res) => {
 
     let tokenValidates = speakEasy.totp.verify({
       secret: getUser.secret.base32,
-      encoding: "base32",
+      encoding: 'base32',
       token,
     });
 
     let qrCodeVerify = speakEasy.totp.verify({
       secret: getUser.secret.ascii,
-      encoding: "ascii",
+      encoding: 'ascii',
       token,
     });
     if (!qrCodeVerify) {
-      return res.status(401).json({ message: "Authentication Invalid" });
+      return res.status(401).json({ message: 'Authentication Invalid' });
     }
     if (!tokenValidates) {
-      return res.status(401).json({ message: "Authentication Invalid Token" });
+      return res.status(401).json({ message: 'Authentication Invalid Token' });
     }
-    res.status(200).json({ message: "Authentication Verified" });
+    res.status(200).json({ message: 'Authentication Verified' });
   } catch (err) {
     res.status(500).json({
-      message: "Error Generating Authencation verify ",
+      message: 'Error Generating Authencation verify ',
       error: err.message,
     });
   }
 });
 
-router.post("/setpassword", async (req, res) => {
+router.post('/setpassword', async (req, res) => {
   // console.log(req.body.password);
   try {
     const { password, id } = req.body;
@@ -293,13 +294,13 @@ router.post("/setpassword", async (req, res) => {
       { _id: id },
       { $set: { password: changePassword } }
     );
-    res.status(200).json({ message: "Password Updated" });
+    res.status(200).json({ message: 'Password Updated' });
   } catch (err) {
-    res.status(500).json({ message: "Internal Error", error: err.message });
+    res.status(500).json({ message: 'Internal Error', error: err.message });
   }
 });
 
-router.post("/setpattern", async (req, res) => {
+router.post('/setpattern', async (req, res) => {
   const { newpattern, id } = req.body;
   const patt = JSON.stringify(newpattern);
 
@@ -309,12 +310,97 @@ router.post("/setpattern", async (req, res) => {
     });
 
     if (patt === exisistPattern.pattern) {
-      return res.status(409).json({ message: "Already exisistPattern " });
+      return res.status(409).json({ message: 'Already exisistPattern ' });
     }
     await adminschema.updateOne({ _id: id }, { $set: { pattern: patt } });
-    res.status(200).json({ message: "NewPattern Updated" });
+    res.status(200).json({ message: 'NewPattern Updated' });
   } catch (error) {
     res.status(404).json({ message: error.message });
+  }
+});
+
+router.get('/getUsersKyc', async (req, res) => {
+  try {
+    const kyc = await kycModal.find({});
+
+    return res.status(200).json(kyc);
+  } catch (error) {
+    return res.status(404).json({ message: error.message });
+  }
+});
+
+router.post('/updateSingeRecordInKyc', async (req, res) => {
+  const { field, userId, status, message = '' } = req.body;
+
+  try {
+    // approve individual records
+    const user = await kycModal.findOneAndUpdate(
+      { userId, 'errorStatus.field': field },
+      {
+        $set: {
+          'errorStatus.$.status': status,
+          'errorStatus.$.message': !status ? message || 'Not valid' : '',
+          'errorStatus.$.isUpdated': true,
+        },
+      },
+      { new: true }
+    );
+
+    if (status) {
+      const kycDetails = await kycModal.findOne({ userId });
+      const isAllVerfied = kycDetails?.errorStatus?.every(
+        (data) => data.status
+      );
+      // if all fiedls approved
+      if (isAllVerfied) {
+        await kycModal.findOneAndUpdate(
+          { userId },
+          { $set: { kycVerifiy: true, waitingStatus: false } }
+        );
+      }
+    }
+
+    return res.status(200).json({
+      message:
+        (status ? 'Approved  ' : 'Rejected  ') +
+        field +
+        ' for ' +
+        user?.aadharName,
+    });
+  } catch (error) {
+    return res.status(404).json({ message: error.message });
+  }
+});
+
+router.post('/updateAllRecordsInKyc', async (req, res) => {
+  const { userId, status, message = '' } = req.body;
+
+  try {
+    const user = await kycModal.findOneAndUpdate(
+      { userId },
+      {
+        $set: {
+          'errorStatus.$[].status': status,
+          'errorStatus.$[].message': !status ? message || 'Not valid' : '',
+          'errorStatus.$[].isUpdated': true,
+        },
+      },
+      { multi: true }
+    );
+
+    await kycModal.findOneAndUpdate(
+      { userId },
+      { $set: { kycVerifiy: status, waitingStatus: !status } }
+    );
+
+    return res.status(200).json({
+      message:
+        (status ? 'Approved  ' : 'Rejected  ') +
+        ' All Kyc Records For ' +
+        user?.aadharName,
+    });
+  } catch (error) {
+    return res.status(404).json({ message: error.message });
   }
 });
 
