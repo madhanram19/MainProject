@@ -1,19 +1,19 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 const getToken = () => {
-  let getToken = localStorage.getItem("token") || [];
+  let getToken = localStorage.getItem('token') || [];
   return getToken ? getToken : null;
 };
 
 export const usersApi = createApi({
-  reducerPath: "api",
+  reducerPath: 'api',
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:4500",
+    baseUrl: 'http://localhost:4500',
     prepareHeaders: (headers) => {
       const token = getToken();
 
       if (token) {
-        headers.set("Authorization", `${token}`);
+        headers.set('Authorization', `${token}`);
       }
     },
   }),
@@ -21,148 +21,166 @@ export const usersApi = createApi({
   endpoints: (builder) => ({
     login: builder.mutation({
       query: (credentials) => ({
-        url: "/user/login",
-        method: "POST",
+        url: '/user/login',
+        method: 'POST',
         body: credentials,
       }),
-      providesTags: ["User"], // Invalidation tag
+      providesTags: ['User'], // Invalidation tag
     }),
     register: builder.mutation({
       query: (credentials) => ({
-        url: "/user/register",
-        method: "POST",
+        url: '/user/register',
+        method: 'POST',
         body: credentials,
       }),
-      providesTags: ["User"], // Invalidation tag
+      providesTags: ['User'], // Invalidation tag
     }),
-    tagTypes: ["User"],
+    tagTypes: ['User'],
     sendOtp: builder.mutation({
       query: (credentials) => ({
-        url: "/user/send-otp",
-        method: "POST",
+        url: '/user/send-otp',
+        method: 'POST',
         body: credentials,
       }),
-      providesTags: ["User"], // Invalidation tag
+      providesTags: ['User'], // Invalidation tag
     }),
-    tagTypes: ["User"],
+    tagTypes: ['User'],
 
     handleForgetPassword: builder.mutation({
       query: (body) => ({
-        url: "/user/forgetPassword",
-        method: "POST",
+        url: '/user/forgetPassword',
+        method: 'POST',
         body,
       }),
-      providesTags: ["User"],
-      tagTypes: ["User"],
+      providesTags: ['User'],
+      tagTypes: ['User'],
     }),
     handleForgetPasswordOtpVerify: builder.mutation({
       query: (body) => ({
-        url: "user/verifyOtp",
-        method: "POST",
+        url: 'user/verifyOtp',
+        method: 'POST',
         body,
       }),
     }),
     setNewPassword: builder.mutation({
       query: (body) => ({
-        url: "user/resetpassword",
-        method: "POST",
+        url: 'user/resetpassword',
+        method: 'POST',
         body,
       }),
     }),
     handleTwofactorAuth: builder.mutation({
       query: (body) => ({
-        url: "user/twoFactorAuth/getSecertKey",
-        method: "POST",
+        url: 'user/twoFactorAuth/getSecertKey',
+        method: 'POST',
         body,
       }),
     }),
     twoFactorverifySecretCode: builder.mutation({
       query: (body) => ({
-        url: "user/twoFactorAuth/verifySecret",
-        method: "POST",
+        url: 'user/twoFactorAuth/verifySecret',
+        method: 'POST',
         body,
       }),
     }),
     twoFactorDisable: builder.mutation({
       query: (body) => ({
-        url: "user/twoFactorAuth/disableAuthCode",
-        method: "POST",
+        url: 'user/twoFactorAuth/disableAuthCode',
+        method: 'POST',
         body,
       }),
     }),
     getProfileDetails: builder.mutation({
       query: (body) => ({
-        url: "user/Userdetails",
-        method: "POST",
+        url: 'user/Userdetails',
+        method: 'POST',
         body,
       }),
-      invalidatesTags: ["StopOrder"],
+      invalidatesTags: ['StopOrder'],
     }),
     profileDetailsUpdate: builder.mutation({
       query: (formData) => ({
-        url: "user/Imageupload",
-        method: "POST",
+        url: 'user/Imageupload',
+        method: 'POST',
         body: formData,
       }),
-      invalidatesTags: ["StopOrder"],
+      invalidatesTags: ['StopOrder'],
     }),
     changePasswordUpdate: builder.mutation({
       query: (formData) => ({
-        url: "user/Changepassword",
-        method: "POST",
+        url: 'user/Changepassword',
+        method: 'POST',
         body: formData,
       }),
-      invalidatesTags: ["StopOrder"],
+      invalidatesTags: ['StopOrder'],
     }),
     kycVerifiedUpdate: builder.mutation({
       query: (body) => ({
-        url: "user/kycupload",
-        method: "POST",
+        url: 'user/kycupload',
+        method: 'POST',
         body,
       }),
-      invalidatesTags: ["StopOrder"],
+      invalidatesTags: ['StopOrder'],
     }),
     fetchKycData: builder.mutation({
       query: (body) => ({
-        url: "user/kycfetching",
-        method: "POST",
+        url: 'user/kycfetching',
+        method: 'POST',
         body,
       }),
-      invalidatesTags: ["StopOrder"],
+      invalidatesTags: ['StopOrder'],
     }),
     addBankDetails: builder.mutation({
       query: (body) => ({
-        url: "user/Add",
-        method: "POST",
+        url: 'user/Add',
+        method: 'POST',
         body,
       }),
-      invalidatesTags: ["StopOrder"],
+      invalidatesTags: ['StopOrder'],
     }),
     fetchBankDetails: builder.mutation({
       query: (body) => ({
-        url: "user/Addfetching",
-        method: "POST",
+        url: 'user/Addfetching',
+        method: 'POST',
         body,
       }),
-      invalidatesTags: ["StopOrder"],
+      invalidatesTags: ['StopOrder'],
     }),
 
     addContactDetails: builder.mutation({
       query: (body) => ({
-        url: "user/contactus",
-        method: "POST",
+        url: 'user/contactus',
+        method: 'POST',
         body,
       }),
-      invalidatesTags: ["StopOrder"],
+      invalidatesTags: ['StopOrder'],
+    }),
+    getDeposit: builder.query({
+      query: (id) => ({
+        url: `user/get-deposit/${id}`,
+        method: 'GET',
+      }),
+      invalidatesTags: ['StopOrder'],
+    }),
+    depositAmount: builder.mutation({
+      query: (body) => ({
+        url: 'user/deposit',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['StopOrder'],
     }),
     getContent: builder.query({
-      query: () => "admin/content/getcontents",
-      providesTags: [{ type: "Admin", id: "Contents" }],
+      query: () => 'admin/content/getcontents',
+      providesTags: [{ type: 'Admin', id: 'Contents' }],
     }),
   }),
 });
 
 export const {
+  useGetDepositQuery,
+  useDepositAmountMutation,
+
   useGetContentQuery,
   useRegisterMutation,
   useLoginMutation,

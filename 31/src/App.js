@@ -29,6 +29,7 @@ import TradePage from './pages/trade';
 import Resetpassword from './pages/resetpassword';
 import { ToastContainer } from 'react-toastify';
 import BankDetailspage from './pages/bankdetails';
+import DepositPage from './pages/deposit';
 
 function App() {
   return (
@@ -61,6 +62,7 @@ function App() {
             {/* <Route path='/support' element={<SupportPage />}/> */}
           </Route>
           <Route path="/trade" element={<TradePage />} />
+          <Route path="/deposit" element={<DepositPage />} />
           {/* <Route path='/notfound' element={<NotFoundoundpage/>}/> */}
         </Routes>
       </>

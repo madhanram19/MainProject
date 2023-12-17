@@ -11,6 +11,8 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const kycModal = require('../model/KycModel');
+const tradeModal = require('../model/tradeModel');
+const marketModel = require('../model/marketModel');
 const BankAccountModal = require('../model/BankModel');
 const contact = require('../model/contactmodel');
 
@@ -53,11 +55,16 @@ router.post('/register', async (req, res) => {
     email,
   });
 
+  const market = new marketModel({
+    user: newUser?._id,
+  });
+
   try {
     await newUser.save();
     // // what if other fails,  need to update it error case later
     await wallet.save();
     await address.save();
+    await market.save();
 
     return res.status(201).json({ message: 'User registered successfully' });
   } catch (err) {
@@ -540,6 +547,113 @@ router.post('/contactus', async (req, res) => {
   } catch (err) {
     res.status(500).json({
       message: ' Error Generatinng Contact Us Update',
+      error: err.message,
+    });
+  }
+});
+
+router.get('/get-deposit/:user', async (req, res) => {
+  try {
+    const { user } = req.params;
+
+    const balance = await marketModel.findOne({ user });
+    res.status(201).json({ balance });
+  } catch (err) {
+    res.status(500).json({
+      message: ' Failed to get balance',
+      error: err.message,
+    });
+  }
+});
+router.post('/deposit', async (req, res) => {
+  try {
+    const { inr, user, usdt, btc, currency } = req.body;
+
+    const coin =
+      currency == 'inr' ? { inr } : currency === 'usdt' ? { usdt } : { btc };
+
+    const market = await marketModel.findOneAndUpdate(
+      { user },
+      { $inc: { ...coin } }
+    );
+    console.log({ coin, market });
+    res.status(201).json({ message: 'Deposited SuccessFully' });
+  } catch (err) {
+    res.status(500).json({
+      message: ' Failed to Deposit',
+      error: err.message,
+    });
+  }
+});
+
+router.get('/get-trade/:user', async (req, res) => {
+  try {
+    const { user } = req.params;
+
+    const tradeHistory = await tradeModal.findOne({ user });
+    res.status(201).json({ tradeHistory });
+  } catch (err) {
+    res.status(500).json({
+      message: ' Failed to get tradeHistory',
+      error: err.message,
+    });
+  }
+});
+
+router.post('/trade', async (req, res) => {
+  try {
+    // orderType - must be buy or sell
+    const { user, orderType, price, currency } = req.body;
+
+    // right now only support BTC/inr coin if needed add usdt
+    if (orderType === 'buy') {
+      const user = await marketModel.findOne({ user });
+      if (user?.inr < price) {
+        return res.status(201).json({
+          message:
+            'Insufficient amount to place the order. please deposit first.',
+        });
+      }
+
+      const tradeHistory = await tradeModal.find({});
+      const sellOrder = tradeHistory.filter(
+        (data) =>
+          data.user !== user &&
+          !data.status &&
+          data.orderType === 'sell' &&
+          data.coin === currency
+      );
+      if (sellOrder?.length) {
+        // there is an existing sell order
+        // remove the balance from the wallet
+        await marketModel.findOneAndUpdate(
+          { user },
+          { $inc: { inr: inr * -1 } }
+        );
+        // now its bought by the current user
+        await tradeModal.findByIdAndUpdate(
+          { _id: sellOrder[0]?._id },
+          { $set: { status: true, user: user } }
+        );
+
+        return res.status(201).json({ message: 'You Bought the coin' });
+      }
+    }
+    const newTrade = new tradeModal({
+      user,
+      orderType,
+      price,
+      coin: currency,
+    });
+
+    await newTrade.save();
+
+    await marketModel.findOneAndUpdate({ user }, { $inc: { inr: inr * -1 } });
+
+    res.status(201).json({ message: 'Order Placed Successfully' });
+  } catch (err) {
+    res.status(500).json({
+      message: ' Failed to placed Order',
       error: err.message,
     });
   }

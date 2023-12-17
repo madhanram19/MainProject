@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema(
   {
@@ -17,59 +17,56 @@ const userSchema = new mongoose.Schema(
     },
     phoneNo: {
       type: Number,
-      default: null// add custom validation if needed
+      default: null, // add custom validation if needed
     },
     DOB: {
       type: String, // add custom validation if needed
-      default: null
+      default: null,
     },
     profileImg: {
       type: String,
-      default: null
+      default: null,
     },
     city: {
       type: String,
-      default: null
+      default: null,
     },
     state: {
       type: String,
-      default: null
+      default: null,
     },
     country: {
       type: String,
-      default: null
+      default: null,
     },
     zipCode: {
       type: Number,
-      default: null
+      default: null,
     },
     otp: {
       code: {
-        type: String
-      }
+        type: String,
+      },
     },
     temp_secret: {
       type: Object,
-      default: null
+      default: null,
     },
     secret: {
       type: Object,
-      default: null
+      default: null,
     },
     twoFactorAuth: {
       type: Boolean,
-      default: false
+      default: false,
     },
-    
-
   },
 
   {
-    collection: "users",
+    collection: 'users',
   }
 );
 
-const User = mongoose.model("User", userSchema);
+const User = mongoose.model('User', userSchema);
 
 module.exports = User;
-
