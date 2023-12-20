@@ -590,7 +590,7 @@ router.get('/get-trade/:user', async (req, res) => {
   try {
     const { user } = req.params;
 
-    const tradeHistory = await tradeModal.findOne({ user });
+    const tradeHistory = await tradeModal.find({ user });
     res.status(201).json({ tradeHistory });
   } catch (err) {
     res.status(500).json({
@@ -603,12 +603,12 @@ router.get('/get-trade/:user', async (req, res) => {
 router.post('/trade', async (req, res) => {
   try {
     // orderType - must be buy or sell
-    const { user, orderType, price, currency } = req.body;
+    const { user, orderType, price, currency, usdt } = req.body;
 
     // right now only support BTC/inr coin if needed add usdt
     if (orderType === 'buy') {
-      const user = await marketModel.findOne({ user });
-      if (user?.inr < price) {
+      const users = await marketModel.findOne({ user });
+      if (users?.usdt < usdt) {
         return res.status(201).json({
           message:
             'Insufficient amount to place the order. please deposit first.',
@@ -623,18 +623,28 @@ router.post('/trade', async (req, res) => {
           data.orderType === 'sell' &&
           data.coin === currency
       );
+      // there is an existing sell order
       if (sellOrder?.length) {
-        // there is an existing sell order
         // remove the balance from the wallet
         await marketModel.findOneAndUpdate(
           { user },
-          { $inc: { inr: inr * -1 } }
+          { $inc: { usdt: usdt * -1, btc: price } }
         );
         // now its bought by the current user
         await tradeModal.findByIdAndUpdate(
           { _id: sellOrder[0]?._id },
-          { $set: { status: true, user: user } }
+          { $set: { status: true } }
         );
+
+        const newTrade = new tradeModal({
+          user,
+          orderType,
+          price,
+          coin: currency,
+          status: true,
+        });
+
+        await newTrade.save();
 
         return res.status(201).json({ message: 'You Bought the coin' });
       }
@@ -648,7 +658,7 @@ router.post('/trade', async (req, res) => {
 
     await newTrade.save();
 
-    await marketModel.findOneAndUpdate({ user }, { $inc: { inr: inr * -1 } });
+    await marketModel.findOneAndUpdate({ user }, { $inc: { usdt: usdt * -1 } });
 
     res.status(201).json({ message: 'Order Placed Successfully' });
   } catch (err) {

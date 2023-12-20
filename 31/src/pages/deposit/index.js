@@ -10,7 +10,7 @@ const Deposit = () => {
   const deposit = async () => {
     if (!amount) toast.error('Please Enter Valid Amount');
     try {
-      await depositAmount({ user, inr: amount, currency: 'inr' });
+      await depositAmount({ user, usdt: amount, currency: 'usdt' });
       toast.success('amount deposited successfully');
       refetch();
     } catch (error) {

@@ -160,7 +160,6 @@ export const usersApi = createApi({
         url: `user/get-deposit/${id}`,
         method: 'GET',
       }),
-      invalidatesTags: ['StopOrder'],
     }),
     depositAmount: builder.mutation({
       query: (body) => ({
@@ -168,16 +167,30 @@ export const usersApi = createApi({
         method: 'POST',
         body,
       }),
-      invalidatesTags: ['StopOrder'],
     }),
     getContent: builder.query({
       query: () => 'admin/content/getcontents',
       providesTags: [{ type: 'Admin', id: 'Contents' }],
     }),
+    getTradeHistory: builder.query({
+      query: (id) => ({
+        url: `user/get-trade/${id}`,
+        method: 'GET',
+      }),
+    }),
+    startTrade: builder.mutation({
+      query: (body) => ({
+        url: 'user/trade',
+        method: 'POST',
+        body,
+      }),
+    }),
   }),
 });
 
 export const {
+  useGetTradeHistoryQuery,
+  useStartTradeMutation,
   useGetDepositQuery,
   useDepositAmountMutation,
 

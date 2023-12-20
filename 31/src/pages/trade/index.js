@@ -12,14 +12,21 @@ import tabIcon3 from '../../assets/images/tabIcon3.png';
 
 import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 import classnames from 'classnames';
-import { useDepositAmountMutation, useGetDepositQuery } from '../../redux/api';
+import {
+  useDepositAmountMutation,
+  useGetDepositQuery,
+  useGetTradeHistoryQuery,
+  useStartTradeMutation,
+} from '../../redux/api';
 
 const TradePage = () => {
   const [activeTab, setActiveTab] = useState('3');
   const [activeTab2, setActiveTab2] = useState('1');
   const [activeTab3, setActiveTab3] = useState('1');
   const user = localStorage.getItem('loggedUserId');
-  const [depositAmount] = useDepositAmountMutation();
+  const [startTrade] = useStartTradeMutation();
+  const { data: tradeHistory, refetch: refetchTradeHistory } =
+    useGetTradeHistoryQuery(user);
   const { data, isLoading, isError, refetch } = useGetDepositQuery(user);
 
   console.log({ data });
@@ -36,11 +43,49 @@ const TradePage = () => {
   };
 
   const persentageval = ['0%', '25%', '50%', '75%', '100%'];
+  const [btc, setBtc] = useState(0);
+  const [usdt, setUsdt] = useState(0);
+  const [sellUsdt, setSellUsdt] = useState(0);
+  const [sellBtc, setSellBtc] = useState(0);
 
-  // useEffect(() => {
-  //     document.body.classList.add('dark-theme');
-  // }, []);
+  const BTC_PRICE = 42240.03;
 
+  useEffect(() => {
+    setBtc(usdt / BTC_PRICE);
+  }, [usdt]);
+  console.log({ tradeHistory });
+  useEffect(() => {
+    setSellBtc(sellUsdt / BTC_PRICE);
+  }, [sellUsdt]);
+
+  const onTrade = async (orderType) => {
+    const usdtD = orderType === 'buy' ? usdt : sellUsdt;
+    const btcD = orderType === 'buy' ? btc : sellBtc;
+    const payload = {
+      user,
+      orderType,
+      currency: 'btc',
+      price: btcD,
+      usdt: usdtD,
+    };
+
+    try {
+      const response = await startTrade(payload);
+      console.log({ response }); // toastify
+      refetchTradeHistory();
+      refetch();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const OpenOrders = tradeHistory?.tradeHistory?.filter((data) => data.status);
+  const tradeHistories = tradeHistory?.tradeHistory;
+  const myOrders = tradeHistory?.tradeHistory.filter(
+    (data) => data.user === user
+  );
+
+  console.log({ OpenOrders, tradeHistories, myOrders });
   return (
     <>
       <Header />
@@ -684,7 +729,7 @@ const TradePage = () => {
                                 </div>
                                 <div className="px-2">
                                   <span className="text-red fs-16 fw-600">
-                                    62,972.45
+                                    {BTC_PRICE}
                                   </span>
                                 </div>
                                 <div className="gridbody tablesecond scroller">
@@ -874,11 +919,11 @@ const TradePage = () => {
                             <div>
                               Your Balance{' '}
                               <div className="d-flex gap-12">
-                                <div className="mr-3">
+                                {/* <div className="mr-3">
                                   Inr - {data?.balance?.inr || 0}
-                                </div>
+                                </div> */}
                                 <div className="mr-3">
-                                  usdt - {data?.balance?.ustd || 0}
+                                  usdt - {data?.balance?.usdt || 0}
                                 </div>
                                 <div>btc - {data?.balance?.btc || 0}</div>
                               </div>
@@ -927,8 +972,12 @@ const TradePage = () => {
                                       </div>
                                       <input
                                         className="form-control py-0 border-0 text-right"
-                                        type="text"
+                                        type="number"
                                         name=""
+                                        value={usdt}
+                                        onChange={(e) =>
+                                          setUsdt(e.target.value)
+                                        }
                                         placeholder=""
                                       />
                                       <div className="input-group-append">
@@ -952,8 +1001,10 @@ const TradePage = () => {
                                       </div>
                                       <input
                                         className="form-control py-0 border-0 text-right"
-                                        type="text"
+                                        type="number"
                                         name=""
+                                        value={btc}
+                                        disabled
                                         placeholder=""
                                       />
                                       <div className="input-group-append">
@@ -994,6 +1045,7 @@ const TradePage = () => {
                                     <button
                                       className="btn btn-green btn-block rounded-pill"
                                       type="button"
+                                      onClick={() => onTrade('buy')}
                                     >
                                       Buy
                                     </button>
@@ -1039,8 +1091,12 @@ const TradePage = () => {
                                       </div>
                                       <input
                                         className="form-control py-0 border-0 text-right"
-                                        type="text"
+                                        type="number"
                                         name=""
+                                        value={sellUsdt}
+                                        onChange={(e) =>
+                                          setSellUsdt(e.target.value)
+                                        }
                                         placeholder=""
                                       />
                                       <div className="input-group-append">
@@ -1064,7 +1120,9 @@ const TradePage = () => {
                                       </div>
                                       <input
                                         className="form-control py-0 border-0 text-right"
-                                        type="text"
+                                        type="number"
+                                        disabled
+                                        value={sellBtc}
                                         name=""
                                         placeholder=""
                                       />
@@ -1102,6 +1160,7 @@ const TradePage = () => {
                                     <button
                                       className="btn btn-red btn-block rounded-pill"
                                       type="button"
+                                      onClick={() => onTrade('sell')}
                                     >
                                       Sell
                                     </button>
